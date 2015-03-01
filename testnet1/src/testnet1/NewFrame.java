@@ -118,7 +118,7 @@ public class NewFrame extends java.awt.Frame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
-
+    /*обработчик кнопки Send*/
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
@@ -126,7 +126,7 @@ public class NewFrame extends java.awt.Frame {
         String content = Testnet1.getContent(url);
         jTextArea1.setText(content); 
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    /*обработчик кнопки Send POST*/
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         String url = jTextField1.getText();

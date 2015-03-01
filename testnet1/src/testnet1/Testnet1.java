@@ -28,6 +28,7 @@ public class Testnet1 {
          System.out.printf("\nResult:  %s", result);
     }
     
+    /*GET request*/
     public static void sendRequest(String url){
         try{
             URL currUrl = new URL(url);
@@ -42,7 +43,7 @@ public class Testnet1 {
         }
     }
     
-    
+    /*GET request and get response content*/
     public static String getContent(String url){
         try{
             URL currUrl = new URL(url);
@@ -59,6 +60,7 @@ public class Testnet1 {
         }
     }
     
+    /*save response on GET request to file*/
     public static boolean loadContentToFile(String url, String filename){
           try{
             URL currUrl = new URL(url);
@@ -78,6 +80,7 @@ public class Testnet1 {
     
     }
     
+    /*send POST request and resive response*/
     public static String sendRequest(String url, String data){
         try{
             URL currUrl = new URL(url);
