@@ -106,4 +106,50 @@ public class Testnet1 {
     
     }
     
+    public static String uploadFile(String url, String filename){
+       try{
+            
+            File file = new File(filename);
+           FileInputStream fis = new FileInputStream(file);
+           int c  = fis.available();
+           byte[] b = new byte[c];
+           fis.read(b);
+           fis.close();
+            URL currUrl = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection)currUrl.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            String boundary = "----------Q3o1lH0sOFGdmsjeitxjAL";
+           connection.addRequestProperty("Content-Type", "multipart/form-data; boundary="+boundary);
+            
+            
+            OutputStream out = connection.getOutputStream();
+             
+           out.write(("--"+boundary+"\n").getBytes());
+           out.write(("Content-Disposition: form-data; name=\"file\"; filename=\""+file.getName() +"\"\n").getBytes());
+           out.write(("Content-Type: application/octet-stream\n").getBytes());
+           out.write(("Content-Transfer-Encoding: binary\n\n").getBytes());
+            out.write(b);
+            out.write(("\n--"+boundary+"--\n\n").getBytes());
+            out.flush();
+            out.close();
+            //connection.connect();
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String resivedString;
+            StringBuffer sb = new StringBuffer();
+            while ((resivedString = in.readLine()) != null) {
+               sb.append(resivedString);
+            }
+            in.close();
+            return sb.toString();
+        }
+        catch(Exception e){
+            return null;
+        }  
+    
+    
+    }
+    
+    
 }

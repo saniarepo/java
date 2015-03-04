@@ -34,12 +34,14 @@ public class NewFrame extends java.awt.Frame {
         jButton1 = new javax.swing.JButton();
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jTextField3 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jFileChooser1 = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
         setBounds(new java.awt.Rectangle(0, 0, 54, 24));
         setMinimumSize(new java.awt.Dimension(820, 650));
-        setPreferredSize(new java.awt.Dimension(820, 700));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -54,7 +56,7 @@ public class NewFrame extends java.awt.Frame {
         jLabel1.setText("URL:");
         jPanel1.add(jLabel1);
 
-        jTextField1.setText("http://site1.loc/test_request.php");
+        jTextField1.setText("http://site1.loc:8080/test_request.php");
         jTextField1.setMinimumSize(new java.awt.Dimension(6, 100));
         jTextField1.setPreferredSize(new java.awt.Dimension(200, 20));
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -84,6 +86,31 @@ public class NewFrame extends java.awt.Frame {
             }
         });
         jPanel1.add(jButton2);
+
+        jTextField3.setText("c:\\www3\\site1\\wall.jpg");
+        jTextField3.setPreferredSize(new java.awt.Dimension(140, 20));
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jTextField3);
+
+        jButton3.setText("Send File");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3);
+
+        jFileChooser1.setApproveButtonText("Open");
+        jFileChooser1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFileChooser1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jFileChooser1);
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setAutoscrolls(true);
@@ -135,6 +162,27 @@ public class NewFrame extends java.awt.Frame {
         jTextArea1.setText(content);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+         String url = "http://site1.loc:8080/upload.php";
+        String filename = jTextField3.getText();
+        String content = Testnet1.uploadFile(url,filename);
+        jTextArea1.setText(content);
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
+        // TODO add your handling code here:
+        jTextField3.setText(jFileChooser1.getSelectedFile().getPath()); 
+        
+    }//GEN-LAST:event_jFileChooser1ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+        
+        
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -151,11 +199,14 @@ public class NewFrame extends java.awt.Frame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
