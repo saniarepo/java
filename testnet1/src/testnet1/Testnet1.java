@@ -7,6 +7,7 @@ package testnet1;
 
 import java.net.*;
 import java.io.*;
+import java.util.*;
 
 /**
  *
@@ -103,37 +104,96 @@ public class Testnet1 {
         catch(Exception e){
             return null;
         }
-    
+        
     }
     
-    public static String uploadFile(String url, String filename){
+    /*send POST request and resive response*/
+    public static String sendPostRequest(String url, Map<String,String> data){
+        try{
+            URL currUrl = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection)currUrl.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+            StringBuffer reqStr = new StringBuffer();
+           int count = 0;
+            for ( String key: data.keySet() ){
+               reqStr.append(key).append("=").append(data.get(key));
+               count++;
+               if ( count  < data.size()) reqStr.append("&");
+               
+           }
+           
+            out.write(reqStr.toString());
+           out.close();
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String resivedString;
+            StringBuffer sb = new StringBuffer();
+            while ((resivedString = in.readLine()) != null) {
+               sb.append(resivedString);
+            }
+            in.close();
+            return sb.toString();
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+    
+    
+    public static String uploadFiles(String url, Map<String,String> data, Map<String,String> files){
        try{
             
-            File file = new File(filename);
-           FileInputStream fis = new FileInputStream(file);
-           int c  = fis.available();
-           byte[] b = new byte[c];
-           fis.read(b);
-           fis.close();
-            URL currUrl = new URL(url);
+           File f = null;
+           FileInputStream fis = null;
+           int c;
+           byte[] b = null;
+           URL currUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection)currUrl.openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
             String boundary = "----------Q3o1lH0sOFGdmsjeitxjAL";
            connection.addRequestProperty("Content-Type", "multipart/form-data; boundary="+boundary);
-            
-            
-            OutputStream out = connection.getOutputStream();
-             
-           out.write(("--"+boundary+"\n").getBytes());
-           out.write(("Content-Disposition: form-data; name=\"file\"; filename=\""+file.getName() +"\"\n").getBytes());
-           out.write(("Content-Type: application/octet-stream\n").getBytes());
-           out.write(("Content-Transfer-Encoding: binary\n\n").getBytes());
-            out.write(b);
-            out.write(("\n--"+boundary+"--\n\n").getBytes());
+           OutputStream out = connection.getOutputStream();
+           int count = 0;
+           for (String key: data.keySet()){
+                out.write(("--"+boundary+"\n").getBytes());
+                out.write(("Content-Disposition: form-data; name=\""+key+"\"\n\n").getBytes());
+                
+                out.write(data.get(key).getBytes());
+                count++;
+                 if ( count < (files.size() + data.size())){
+                        out.write(("\n--"+boundary+"\n").getBytes());
+                   }else{
+                        out.write(("\n--"+boundary+"--\n\n").getBytes());
+                   }
+           }
+           
+           for (String field: files.keySet()){
+                f = new File(files.get(field));
+                fis = new FileInputStream(f);
+                c  = fis.available();
+                b = new byte[c];
+                fis.read(b);
+                fis.close();
+               // out.write(("--"+boundary+"\n").getBytes());
+                out.write(("Content-Disposition: form-data; name=\""+field+"\"; filename=\""+f.getName() +"\"\n").getBytes());
+                out.write(("Content-Type: application/octet-stream\n").getBytes());
+                out.write(("Content-Transfer-Encoding: binary\n\n").getBytes());
+                out.write(b);
+                count++;
+                if ( count < (files.size() + data.size())){
+                        out.write(("\n--"+boundary+"\n").getBytes());
+
+                   }else{
+                        out.write(("\n--"+boundary+"--\n\n").getBytes());
+
+                   }
+           }
+          
             out.flush();
             out.close();
-            //connection.connect();
 
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String resivedString;

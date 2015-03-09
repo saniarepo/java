@@ -5,6 +5,7 @@
  */
 package testnet1;
 import  testnet1.*;
+import java.util.*;
 
 /**
  *
@@ -119,7 +120,6 @@ public class NewFrame extends java.awt.Frame {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
         jTextArea1.setWrapStyleWord(true);
         jTextArea1.setBorder(null);
         jTextArea1.setMinimumSize(new java.awt.Dimension(800, 600));
@@ -158,7 +158,11 @@ public class NewFrame extends java.awt.Frame {
         // TODO add your handling code here:
         String url = jTextField1.getText();
         String data = jTextField2.getText();
-        String content = Testnet1.sendRequest(url,data);
+        Map<String,String> d = new Hashtable<String,String>();
+        d.put("data", data);
+        d.put("key1", "value1");
+        d.put("key2", "value2");
+        String content = Testnet1.sendPostRequest(url,d);
         jTextArea1.setText(content);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -166,13 +170,22 @@ public class NewFrame extends java.awt.Frame {
         // TODO add your handling code here:
          String url = "http://site1.loc:8080/upload.php";
         String filename = jTextField3.getText();
-        String content = Testnet1.uploadFile(url,filename);
-        jTextArea1.setText(content);
+       String field = "file";
+       Map<String,String> files = new <String,String>Hashtable();
+       files.put(field,filename);
+       Map<String,String> data = new <String,String>Hashtable();
+       data.put("data", jTextField2.getText());
+       
+       
+       String content = Testnet1.uploadFiles(url,data,files);
+       System.out.println(content);
+       jTextArea1.setText(content);
         
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
         // TODO add your handling code here:
+        
         jTextField3.setText(jFileChooser1.getSelectedFile().getPath()); 
         
     }//GEN-LAST:event_jFileChooser1ActionPerformed
