@@ -172,7 +172,7 @@ public class NewFrame extends java.awt.Frame {
         String filename = jTextField3.getText();
        String field = "file";
        Map<String,String> files = new <String,String>Hashtable();
-       files.put(field,filename);
+       //files.put(field,filename);
        Map<String,String> data = new <String,String>Hashtable();
        data.put("data", jTextField2.getText());
        
