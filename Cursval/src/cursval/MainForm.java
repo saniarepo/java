@@ -14,11 +14,25 @@ import javax.swing.table.TableModel;
  */
 public class MainForm extends java.awt.Frame {
 
+    
+     public Map<String, String> valutesMap = null;
     /**
      * Creates new form MainForm
      */
     public MainForm() {
         initComponents();
+        String url1 = Cursval.urlValutes1;
+        String xmlContent = HttpReq.sendGetRequest(url1);
+        try{
+            valutesMap = Cursval.parseValutes(xmlContent);
+            for (String code: valutesMap.keySet()){
+                jComboBox1.addItem(valutesMap.get(code).trim());
+            }
+        }catch(Exception e){
+            System.out.println(e.toString());
+            
+        }
+        
     }
 
     /**
@@ -51,7 +65,6 @@ public class MainForm extends java.awt.Frame {
         jLabel1.setText("Валюта");
         jPanel1.add(jLabel1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "R01235" }));
         jPanel1.add(jComboBox1);
 
         jLabel2.setText("с ");
@@ -99,17 +112,30 @@ public class MainForm extends java.awt.Frame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        String code = "R01235";
+        
+                for ( String key: this.valutesMap.keySet() ){
+                    System.out.println("map: "+valutesMap.get(key));
+                    System.out.println("combo: "+jComboBox1.getSelectedItem().toString());
+                    if ( this.valutesMap.get(key).equals(jComboBox1.getSelectedItem().toString()) ){
+                        code = key;
+                        System.out.println("key="+key);
+                    }
+                        
+                }
         String url = Cursval.url + "date_req1="+jFormattedTextField1.getText();
-        url += "&date_req2="+jFormattedTextField2.getText()+"&VAL_NM_RQ="+jComboBox1.getSelectedItem().toString();
+        url += "&date_req2="+jFormattedTextField2.getText()+"&VAL_NM_RQ="+ code;        
         String content = HttpReq.sendGetRequest(url);
         try{
-            List<Cursval.Curs> curses =  Cursval.parse(content);
+            List<Cursval.Curs> curses =  Cursval.parseCurses(content);
             Cursval.printCurses(curses);
             int row = 0;
    
-            String[] listData = new String[curses.size()]; 
+            String[] listData = new String[curses.size()+1]; 
+            listData[0] = jComboBox1.getSelectedItem().toString();
             for (Cursval.Curs curs: curses){
-               listData[row] = curs.getDate() + "   " + curs.getCurs() + "    " + curs.getValuta();
+               
+                listData[row+1] = curs.getDate() + "   " + curs.getCurs()/curs.getNominal()  + "     " + curs.getValuta();
                 row++;
             }
             jList1.setListData(listData);

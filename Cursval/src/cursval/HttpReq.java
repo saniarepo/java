@@ -23,7 +23,7 @@ public class HttpReq {
             connection.setDoOutput(true);
             connection.setRequestMethod("GET");
             
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "windows-1251"));
             String resivedString;
             StringBuffer sb = new StringBuffer();
             while ((resivedString = in.readLine()) != null) {
