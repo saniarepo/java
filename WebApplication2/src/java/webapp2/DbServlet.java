@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletConfig;
-import java.sql.*;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
+import services.db.MysqlStore;
 /**
  *
  * @author Alexander
@@ -70,58 +70,9 @@ public class DbServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
  
-        // Устанавливаем соединение с БД
+        
  
-        String connectionURL = "jdbc:mysql://127.0.0.1/symfony";
- 
-        Connection connection = null;
- 
-        ResultSet rs;
- 
-        response.setContentType("text/html");
- 
-        ArrayList dataList = new ArrayList();
- 
-        try {
- 
-            // Загружаем драйвер БД
- 
-            Class.forName("com.mysql.jdbc.Driver");
- 
-            // Подключаемся к БД
- 
-            connection = DriverManager.getConnection(connectionURL, "root",
-                    "rootroot");
- 
-            // Выбираем данные из БД
- 
-            String sql = "select * from film";
- 
-            Statement s = connection.createStatement();
- 
-            s.executeQuery(sql);
- 
-            rs = s.getResultSet();
- 
-            while (rs.next()) {
- 
-                // Сохраняем всё в список
- 
-                dataList.add(rs.getInt("id"));
- 
-                dataList.add(rs.getString("name"));
- 
-            }
- 
-            rs.close();
- 
-            s.close();
- 
-        } catch (Exception e) {
- 
-            System.out.println("Exception is ;" + e);
- 
-        }
+        ArrayList dataList = MysqlStore.getSelect("select * from film");
  
         request.setAttribute("data", dataList);
  
