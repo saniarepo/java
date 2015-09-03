@@ -8,6 +8,8 @@ package services.db;
 import java.sql.*;
 import java.util.ArrayList;
 import java.io.IOException;
+import webapp2.Film;
+
 
 /**
  *
@@ -20,9 +22,10 @@ public class MysqlStore {
     private static String dbUser = "root";
     private static String dbPass = "rootroot";
     
-    public static ArrayList getSelect(String sql){
+    public static ArrayList getFilms(){
             // Устанавливаем соединение с БД
- 
+        
+        String sql = "select * from film";
         String connectionURL = "jdbc:mysql://127.0.0.1/"+dbName;
  
         Connection connection = null;
@@ -49,14 +52,19 @@ public class MysqlStore {
             s.executeQuery(sql);
  
             rs = s.getResultSet();
- 
+          
             while (rs.next()) {
  
                 // Сохраняем всё в список
  
-                dataList.add(rs.getInt("id"));
+                Film film = new Film();
+                film.id = rs.getInt("id");
+                film.name = rs.getString("name");
+                film.desc = rs.getString("description");
+                film.year = rs.getInt("year");
+                film.genre = rs.getString("genre");
+                dataList.add(film);
  
-                dataList.add(rs.getString("name"));
  
             }
  

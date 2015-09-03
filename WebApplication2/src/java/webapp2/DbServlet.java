@@ -72,7 +72,7 @@ public class DbServlet extends HttpServlet {
  
         
  
-        ArrayList dataList = MysqlStore.getSelect("select * from film");
+        ArrayList dataList = MysqlStore.getFilms();
  
         request.setAttribute("data", dataList);
  
